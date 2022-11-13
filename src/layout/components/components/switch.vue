@@ -18,23 +18,22 @@
 </template>
 
 <script setup>
-import { translate } from "element-plus";
-import { computed, ref } from "vue";
-import { init } from '@/hooks/common'
+import { computed } from 'vue';
+import { init } from '@/hooks/common';
+import { Moon, Sunny } from '@element-plus/icons-vue';
 
-let { base } = init();
-let theme = computed(() => !!base.theme);
+let { common } = init();
+let theme = computed(() => !!common.theme);
 
 let togglerTheme = () => {
-  console.log(theme.value, "theme");
   if (theme.value) {
-    base.setTheme("");
+    common.setTheme('');
   } else {
-    base.setTheme("dark");
+    common.setTheme('dark');
   }
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .theme-toggler-content {
   background-color: var(--bg-color);
   color: var(--text-color);
@@ -45,7 +44,6 @@ let togglerTheme = () => {
   align-items: center;
   border-radius: 50%;
   height: 24px;
-  padding: 0 12px;
   .switch {
     margin: 0;
     display: inline-block;
@@ -70,16 +68,16 @@ let togglerTheme = () => {
       transform: translate(0);
       color: var(--text-color-light);
       transition: border-color var(--el-transition-duration),
-      background-color var(--el-transition-duration),
-      transform var(--el-transition-duration);
+        background-color var(--el-transition-duration),
+        transform var(--el-transition-duration);
 
-      .switch__icon{
+      .switch__icon {
         height: 16px;
         width: 16px;
         position: relative;
         height: 16px;
         width: 16px;
-        .el-icon{
+        .el-icon {
           position: absolute;
           top: 1px;
           left: 1px;

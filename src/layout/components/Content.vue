@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="content">
+  <div class="content" id="content">
     <section>
       <router-view v-slot="{ Component }">
         <transition name="fade-transform" mode="out-in">
@@ -14,28 +14,53 @@
 </template>
 
 <script setup>
-import { init } from "@/hooks/common.js";
-import { computed } from "vue";
-
-let { base, route } = init();
+import { init } from '@/hooks/common.js';
+import watermark from '@/utils/watermark.js';
+import { computed, watch, onMounted } from 'vue';
+let { base, route, common } = init();
 
 let keepAliveComponentNames = computed(() => base.keepAliveComponentNames);
+let dom = {};
+onMounted(() => {
+  watch(
+    () => common.isWatermark,
+    (value) => {
+      if (value) {
+        dom = watermark({
+          watermarl_element: 'content',
+          watermark_txt: base.userinfo.username + '   ' + base.userinfo.userId,
+          watermark_width: 400,
+          watermark_y: 15,
+        });
+      } else {
+        dom.remove && dom.remove();
+      }
+    },
+    {
+      immediate: true,
+    },
+  );
+});
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .content {
   width: calc(100vw - $asideW);
   height: calc(100vh - $headerH - $tagView);
-  position: absolute;
-  left: $asideW;
-  top: calc($headerH + $tagView);
-  z-index: 1;
-  background-color: #f5f5f5;
-  padding: 10px 0 0 10px;
-  section{
+  background-color: var(--el-bg-color);
+  padding: 8px;
+  position: relative;
+  section {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: #fff;
+
+    :deep(.el-loading-parent--relative) {
+      height: max-content;
+      width: 100%;
+    }
   }
+}
+.content:not(.isTagView) {
+  height: calc(100vh - $headerH);
 }
 </style>

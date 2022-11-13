@@ -1,110 +1,144 @@
-<!--  -->
 <template>
-  <div class="aside_group">
-    <div class="aside-logo" @click="openHome">
-      <img v-if="!isCollapse" src="/img/logo-sidebar.png" class="Fold">
-      <img v-else src="/img/avatar.jpg" class="Expand">
+  <div>
+    <!-- logo -->
+    <div class="headerLogo" v-if="isLogo">
+      <img src="/img/t1.gif" class="Fold" />
+      <p v-if="!isCollapse" class="Expand">万能工具库</p>
     </div>
-    <el-scrollbar class="scrollbar_group">
-      <el-menu
-        :default-active="activePath"
-        @select="menuSelect"
-        :collapse="isCollapse"
-        :collapse-transition="false"
-      >
-        <menu-item v-for="item in routes" :key="item.index" :item="item"></menu-item>
-      </el-menu>
-    </el-scrollbar>
+    <!-- search -->
+    <div class="search" v-if="!isCollapse && isSearch">
+      <el-input v-model="searchValue" placeholder="请输入搜索内容"></el-input>
+    </div>
+    <!-- menu -->
+    <div>
+      <el-scrollbar class="scrollbar_group">
+        <el-menu
+          :router="false"
+          :class="[
+            !isCollapse && isSearch ? 'fold' : 'unfold',
+            isLogo ? 'logo' : 'unlogo',
+          ]"
+          :default-active="defaultActive"
+          @select="menuSelect"
+          :collapse="isCollapse"
+          :collapse-transition="false"
+        >
+          <menu-item
+            v-for="item in routes"
+            :key="item.id"
+            :item="item"
+          ></menu-item>
+        </el-menu>
+      </el-scrollbar>
+    </div>
   </div>
 </template>
 
-<script>
-import { computed, watch, ref } from "vue";
-import { refresh } from '@/utils/router'
-import MenuItem from './components/MenuItem.vue';
+<script setup>
 import { init } from '@/hooks/common.js';
-export default {
-  components: {
-    MenuItem
+import MenuItem from './components/MenuItem.vue';
+import { computed, watch, ref } from 'vue';
+import { isLink } from '@/utils';
+import { openNewWindow } from '@/utils/router';
+let { base, route, router, common } = init();
+let isCollapse = computed(() => common.isCollapse);
+let searchValue = computed({
+  set(value) {
+    base.setSearchValue(value);
   },
-  setup(){
-    let { base, user, route, router} = init()
-    let isCollapse = computed(() => base.isCollapse);
-    let routes = computed(() => user.routes);
-    let routeList = computed(() => user.routeList);
-    // 默认展示的页面(左侧侧边栏默认选中)
-    let activePath = ref('');
-    // 点击logo
-    let openHome = () => {
-      router.push('/')
+  get() {
+    return base.searchValue;
+  },
+});
+let isLogo = computed(() => common.isLogo);
+let isSearch = computed(() => common.isSearch);
+let routes = computed(() => base.routes);
+let mapRouteList = computed(() => base.mapRouteList);
+let defaultActive = ref('/');
+// 打开固定显示标签页
+base.setDefaultTagView();
+
+// 页面刷新默认打开菜单
+// watchEffect监听方式会在切换路由时相应两次(有时),官网提示要监听到具体路径，而不是整个route
+watch(
+  () => route.fullPath,
+  () => {
+    defaultActive.value = '' + route.meta.id;
+    base.addTagView(route.meta);
+  },
+  {
+    immediate: true,
+  },
+);
+
+// 点击左侧菜单进行页面的刷新(这里的index是route的id)
+let menuSelect = (index, indexPath, item, routeResult) => {
+  // 点击左侧刷新有点影响用户体验
+  //refresh(index)
+  // 当前菜单没有index属性就跳过
+  if (index) {
+    let route = mapRouteList.value.find((el) => el.id == index);
+    let path = '';
+    switch (route.type) {
+      // 1 跳转当前项目内的路由
+      case '1':
+        router.push({ path: route.path });
+        base.addTagView(route);
+        break;
+      // 2 新建窗口打开其他网站
+      case '2':
+        path = isLink(route.path) ? route.path : 'http://' + route.path;
+        window.open(path, '_blank');
+        break;
+      // 2 新建窗口打开当前路由
+      case '3':
+        openNewWindow(route);
+        break;
     }
+  }
+};
+</script>
 
-    // 点击左侧菜单进行页面的刷新(这里的index是route的name)
-    let menuSelect = (index, indexPath, item, routeResult) => {
-      // 点击左侧刷新有点影响用户体验
-      //refresh(index)
+<style lang="scss" scoped>
+.headerLogo {
+  height: $headerH;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 0 8px;
+  .Expand {
+    display: inline-block;
+    font-weight: 500;
+    font-size: 18px;
+    white-space: nowrap;
+  }
 
-      // 当前菜单没有name属性就跳过
-      if(index) {
-        let route = routeList.value.find(el => el.name === index)
-        base.addTagView(route)
-      }
-    }
-
-    // 监听路由变化,更新左侧展示的菜单项
-    watch(() =>router.currentRoute.value.name, (newValue,oldValue)=> {
-      activePath.value = newValue;
-    },{ immediate: true })
-
-    return {
-      isCollapse,
-      routes,
-      activePath,
-      menuSelect,
-      openHome
-    }
+  .Fold {
+    width: calc(var(--z-aside-fold-width) - 10px);
   }
 }
-</script>
-<style lang='scss' scoped>
 
-.aside_group {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: $asideW;
-  height: 100vh;
-  overflow: hidden;
-  border-right: solid 1px var(--el-menu-border-color);
-  user-select: none;
-  transition: width var(--el-transition-duration);
-  z-index: 999;
-  .aside-logo{
-    height: $logoH;
+.search {
+  padding: 3px 8px;
+}
+
+:deep(.el-menu) {
+  border-right: none;
+  .el-tooltip__trigger {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 var(--el-menu-base-level-padding);
-    .Expand{
-      width: 48px;
-    }
-    .Fold{
-      width: 100%;
-    }
   }
-  .scrollbar_group{
-    height: calc(100vh - $logoH);
-    width: $asideW;
-    background-color: var(--el-menu-bg-color)
-  }
-
-  ::v-deep(.el-menu){
-    border-right: none;
-  }
-  ::v-deep(.el-menu-item.is-active){
-    box-shadow: 3px 0px 0px $systemColor;
-    width: calc(100% - 3px);
-  }
+}
+:deep(.el-menu.el-menu--vertical.unfold.unlogo) {
+  height: calc(100vh);
+}
+:deep(.el-menu.el-menu--vertical.unfold.logo) {
+  height: calc(100vh - var(--z-header-height));
+}
+:deep(.el-menu.el-menu--vertical.fold.unlogo) {
+  height: calc(100vh - 38px);
+}
+:deep(.el-menu.el-menu--vertical.fold.logo) {
+  height: calc(100vh - var(--z-header-height) - 38px);
 }
 </style>

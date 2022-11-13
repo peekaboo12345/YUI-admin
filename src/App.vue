@@ -4,13 +4,15 @@
     <router-view></router-view>
   </div>
 </template>
-
+<script setup>
+import { init } from '@/hooks/common.js';
+let { router } = init();
+</script>
 <style scoped>
-
-.container{
+.container {
   height: 100vh;
   width: 100vw;
-  position: relative;
-  background-color: var(--el-bg-color);
+  /* position: relative; */
+  /* background-color: var(--el-bg-color); */
 }
 </style>

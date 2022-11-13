@@ -1,80 +1,99 @@
-import { defineStore, acceptHMRUpdate } from 'pinia'
+import { defineStore } from 'pinia';
+import { getUser, getRoutes } from '@/api/login';
 import router from '@/router';
-import { setCss, removeCss, addClass, removeClass } from '@/utils/baseCss';
-import variable from '@/style/variable.module.scss';
+
+// 根据搜索条件筛选左侧菜单
+let _mapRoute = (routes, searchValue) => {
+  let arr = [];
+  routes.forEach((item) => {
+    let newItem = Object.assign({}, item);
+    if (newItem.children && newItem.children.length > 0) {
+      newItem.children = _mapRoute(newItem.children, searchValue);
+      if (newItem.children.length > 0) {
+        arr.push(newItem);
+      }
+    } else {
+      if (newItem.title.indexOf(searchValue) > -1) {
+        arr.push(newItem);
+      }
+    }
+  });
+  return arr;
+};
 
 export const useBaseStore = defineStore('base', {
-  state(){
+  state() {
     return {
-      isCollapse: false, // 是否折叠菜单
-      theme: '', // 当前主题，默认亮色主题
       tagViews: [], // 储存当前点击的菜单
-      test: []
-    }
+      searchValue: '', // 搜索菜单名称
+      routeList: [], // 储存动态路由数据
+      mapRouteList: [], // 主要将多层级路由保存为同一级(用于查找方便)
+      userinfo: {}, // 当前用户登录信息
+      token: '', // 登录验证
+    };
   },
   getters: {
-    keepAliveComponentNames(){
-      return this.tagViews.map(el => el.name)
-    }
+    keepAliveComponentNames() {
+      return this.tagViews.map((el) => el.name);
+    },
+    routes() {
+      return _mapRoute(this.routeList, this.searchValue);
+    },
   },
   actions: {
-    // 设置菜单开关
-    setCollapse(value){
-      this.isCollapse = value;
-      console.log(this.isCollapse, 'this.isCollapse')
-      this.test.push({name: new Date().getTime()})
-      if(value) {
-        setCss('--z-aside-width', variable.foldWidth)
-      } else {
-        removeCss('--z-aside-width')
-      }
+    // 设置token
+    setToken(token) {
+      this.token = token;
     },
-    // 设置主题
-    setTheme(value){
-      if(value) {
-        addClass(value)
-      } else {
-        this.theme ? removeClass(this.theme) : null
-      }
-      this.theme = value;
-      console.log(value, 'Theme')
+    // 设置搜索条件
+    setSearchValue(value) {
+      this.searchValue = value;
     },
-
     // 设置tagView
-    addTagView(route){
+    addTagView(route) {
       route = Object.assign({}, route); // 使响应式失
-      if(!this.tagViews.some(el => el.name === route.name)) {
-        this.tagViews.push(route)
+      if (route?.id) {
+        if (!this.tagViews.some((el) => el.name === route.name)) {
+          this.tagViews.push(route);
+        }
       }
     },
-    
     // 设置默认跳转固定路由
-    setDefaultTagView(){
+    setDefaultTagView() {
       // 当前没有跳转任何路由就跳转最后一个
-      if(!router.currentRoute.value.name && this.tagViews.length > 0) {
-        router.push({name: this.tagViews[this.tagViews.length - 1].name})
+      if (
+        router.currentRoute.value.fullPath === '/' &&
+        this.tagViews.length > 0
+      ) {
+        router.push({ name: this.tagViews[this.tagViews.length - 1].name });
       }
     },
 
     // 删除当前tagview项
     delTagView(name) {
-      this.tagViews = this.tagViews.filter(el => el.name !== name)
-      if(this.tagViews.length > 0) {
-        router.replace({name: this.tagViews[this.tagViews.length - 1].name})
+      this.tagViews = this.tagViews.filter((el) => el.name !== name);
+      if (this.tagViews.length > 0) {
+        router.push({
+          name: this.tagViews[this.tagViews.length - 1].name,
+          replace: true,
+        });
       }
-    }
+    },
+    async getRoutes() {
+      this.mapRouteList = [];
+      let { data: userInfo } = await getUser();
+      this.userinfo = userInfo;
+      let { data: routeList } = await getRoutes();
+      this.routeList = routeList;
+    },
   },
   // 使用该插件，开启数据缓存
   persist: {
     //这里存储默认使用的是session
     //key的名称
     key: 'base',
-    //更改默认存储，我更改为localStorage
-    storage: window.sessionStorage,
+    //更改默认存储，默认存储为localStorage
+    storage: window.localStorage,
     // 默认是全部进去存储
-  }
-})
-
-// if (import.meta.hot) {
-//   import.meta.hot.accept(acceptHMRUpdate(useBaseStore, import.meta.hot))
-// }
+  },
+});

@@ -1,4 +1,4 @@
-import {token, userData, routes} from '@/data/user.js'
+import { token, userData, routes } from './data/user.js';
 
 export default [
   {
@@ -7,8 +7,8 @@ export default [
     response: () => ({
       code: '200',
       msg: '登录成功',
-      data: token
-    })
+      data: token,
+    }),
   },
   {
     url: '/getUser',
@@ -16,8 +16,8 @@ export default [
     response: () => ({
       code: '200',
       msg: '获取成功',
-      data: userData
-    })
+      data: userData,
+    }),
   },
   {
     url: '/getRoutes',
@@ -25,7 +25,7 @@ export default [
     response: () => ({
       code: '200',
       msg: '获取成功',
-      data: routes
-    })
-  }
-]
+      data: routes,
+    }),
+  },
+];

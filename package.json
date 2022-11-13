@@ -1,31 +1,35 @@
 {
-  "name": "vite-test",
+  "name": "test-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "prettier --write ."
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.0.9",
-    "axios": "^1.1.2",
-    "default-passive-events": "^2.0.0",
-    "element-plus": "^2.2.13",
+    "@element-plus/icons-vue": "^2.0.10",
+    "axios": "^1.1.3",
+    "element-plus": "^2.2.19",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
-    "pinia": "^2.0.22",
+    "pinia": "^2.0.23",
     "pinia-plugin-persistedstate": "^2.3.0",
     "screenfull": "^6.0.2",
-    "vue": "^3.2.37",
-    "vue-router": "^4.1.3"
+    "vue": "^3.2.41",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^3.0.0",
-    "sass": "^1.54.4",
-    "sass-loader": "^13.0.2",
-    "typescript": "^4.7.4",
-    "vite": "^3.0.0"
+    "@vitejs/plugin-vue": "^3.2.0",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^9.7.0",
+    "prettier": "^2.7.1",
+    "sass": "^1.55.0",
+    "sass-loader": "^13.1.0",
+    "vite": "^3.2.0"
   }
 }

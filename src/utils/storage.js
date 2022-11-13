@@ -1,15 +1,15 @@
-
 export const setStorage = (key, value) => {
-  sessionStorage.setItem(key, JSON.stringify(value))
+  localStorage.setItem(key, JSON.stringify(value));
   return true;
-}
+};
 
 export const getStorage = (key) => {
-  let data = sessionStorage.getItem(key);
+  let data = localStorage.getItem(key);
   return data ? JSON.parse(data) : false;
-}
+};
 
-export const getData = (key, defaultValue = '') => {
-  let data = getStorage(key);
-  return data ? data : defaultValue;
-}
+// 获取存在base内的数据
+export const getBase = (key, defaultValue = '') => {
+  let data = getStorage('base');
+  return data[key] ? data[key] : defaultValue;
+};

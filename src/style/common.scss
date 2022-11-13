@@ -1,9 +1,21 @@
+/* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: "站酷高端黑 Regular";font-weight: 400;src: url("//at.alicdn.com/wf/webfont/BmXIfVDpviT7/4Hf8GMXw94q8vRVdkMF6L.woff2") format("woff2"),
+  url("//at.alicdn.com/wf/webfont/BmXIfVDpviT7/5QqI4rqxflE60yQBHragq.woff") format("woff");
+  font-display: swap;
+}
+
 html,body {
   margin: 0;
   overflow: hidden;
+  font-family: '思源宋体 ExtraLight';
 }
 *{
   box-sizing: border-box;
+}
+
+.m5{
+  margin: 0 5px;
 }
 .router-link{
   width: 100%;
@@ -15,6 +27,7 @@ html,body {
   width: 100%;
  }
 
+//  组件渲染时的动画
  /* fade-transform */
 .fade-transform-leave-active,
 .fade-transform-enter-active {

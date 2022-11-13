@@ -1,38 +1,18 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import pinia from '@/store'
-import ElementPlus from 'element-plus'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import { useUserStore } from './store/user'
-import 'element-plus/dist/index.css'
-import 'element-plus/theme-chalk/dark/css-vars.css' // 暗黑主题样式
-import '@/style/index.scss'
-import "nprogress/nprogress.css"; // 引入加载进度css样式
+import { createApp } from 'vue';
+import router from '@/router';
+import pinia from '@/store';
+import ElementPlus from 'element-plus';
 
-// 解决Chrome51 版本以后，Chrome 增加了新的事件捕获机制－Passive Event Listeners
-// 不使用插件会提示优化mousewheel/touch事件等
-import 'default-passive-events'
+import 'element-plus/dist/index.css';
+import 'element-plus/theme-chalk/dark/css-vars.css'; // 暗黑主题样式
 
-import '@/mock'; // 引入mock，拦截请求
-console.log('123')
-import SvgIcon from 'components/SvgIcon.vue'
+import '@/style/index.scss';
 
-const app = createApp(App)
+import Iconfont from '@/components/iconfont.vue';
+import App from './App.vue';
+import '@/mock'; // 拦截请求
 
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component)
-}
-
-import './permission'
-
-let user = useUserStore(pinia)
-// user.getRoutes()
-
-app.component('SvgIcon', SvgIcon)
-
-app.use(pinia).use(router).use(ElementPlus)
-
-router.isReady().then(() => {
-  app.mount('#app')
-})
+const app = createApp(App);
+app.component('Iconfont', Iconfont);
+app.use(router).use(pinia).use(ElementPlus);
+app.mount('#app');
