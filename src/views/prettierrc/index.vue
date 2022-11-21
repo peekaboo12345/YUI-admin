@@ -1,5 +1,5 @@
 <template>
-  <div>prettierrc</div>
+  <v-md-preview :text="text"></v-md-preview>
 </template>
 
 <script>
@@ -10,5 +10,6 @@ export default {
 
 <script setup>
 import { ref } from 'vue';
+import text from './prettier.md?raw';
 </script>
 <style scoped lang="scss"></style>

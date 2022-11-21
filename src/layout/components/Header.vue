@@ -22,8 +22,9 @@
 
       <!-- 个人信息 -->
       <el-dropdown
-        :hide-on-click="false"
+        :hide-on-click="true"
         trigger="click"
+        @command="onCommand"
         placement="bottom-end"
       >
         <div>
@@ -39,10 +40,10 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item
+            <el-dropdown-item command="user"
               ><el-icon><User /></el-icon>个人信息</el-dropdown-item
             >
-            <el-dropdown-item divided
+            <el-dropdown-item divided command="switchButton"
               ><el-icon><SwitchButton /></el-icon>退出登录</el-dropdown-item
             >
           </el-dropdown-menu>
@@ -66,8 +67,19 @@ let { common, route, router } = init();
 let isCollapse = computed(() => common.isCollapse);
 const setCollapse = () => common.setCollapse(!isCollapse.value);
 
-// 控制主题显示
-let theme = ref(false);
+let onCommand = (name, props) => {
+  console.log(name, props);
+  switch (name) {
+    case 'user':
+      router.push({ name: 'user' });
+      break;
+    case 'switchButton':
+      localStorage.removeItem('base');
+      localStorage.removeItem('common');
+      router.push({ path: '/login', replace: true });
+      break;
+  }
+};
 </script>
 <style lang="scss" scoped>
 .header_group {
@@ -79,7 +91,7 @@ let theme = ref(false);
   display: flex;
   justify-content: space-between;
   transition: all var(--el-transition-duration);
-  font-size: 24px;
+  font-size: 18px;
 
   .left {
   }

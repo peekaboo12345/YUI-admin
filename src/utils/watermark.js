@@ -14,7 +14,7 @@ export default function watermark(settings) {
     watermark_fontsize: '15px', //水印字体大小
     watermark_font: '微软雅黑', //水印字体
     watermark_width: 500, //水印宽度
-    watermark_height: 50, //水印长度
+    watermark_height: 80, //水印长度
     watermark_angle: 15, //水印倾斜度数
   };
   //采用配置项替换默认值，作用类似jquery.extend
@@ -55,7 +55,8 @@ export default function watermark(settings) {
   );
   var x;
   var y;
-  for (var i = 0; i < defaultSettings.watermark_rows; i++) {
+  // 这里加一是为了适配页面全屏后会出现一部分空白
+  for (var i = 0; i < defaultSettings.watermark_rows + 1; i++) {
     y =
       defaultSettings.watermark_y +
       (defaultSettings.watermark_y_space + defaultSettings.watermark_height) *
@@ -100,6 +101,7 @@ export default function watermark(settings) {
       mask_div.style.textAlign = 'center';
       mask_div.style.width = defaultSettings.watermark_width + 'px';
       mask_div.style.height = defaultSettings.watermark_height + 'px';
+      mask_div.style.lineHeight = defaultSettings.watermark_height + 'px';
       mask_div.style.display = 'block';
       oTemp.appendChild(mask_div);
     }

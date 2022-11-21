@@ -1,15 +1,14 @@
 <template>
-  <v-md-preview :text="text"></v-md-preview>
+  <div>storage</div>
 </template>
 
 <script>
 export default {
-  name: 'home',
+  name: '',
 };
 </script>
 
 <script setup>
 import { ref } from 'vue';
-import text from './baseHome.md?raw';
 </script>
 <style scoped lang="scss"></style>

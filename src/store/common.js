@@ -17,7 +17,7 @@ export const useCommonStore = defineStore('common', {
   actions: {
     // 设置菜单是否折叠
     setCollapse(flag) {
-      this.isCollapse = flag || !this.isCollapse;
+      this.isCollapse = typeof flag === 'boolean' ? flag : !this.isCollapse;
       if (this.isCollapse) {
         setCss('--z-aside-width', foldWidth);
       } else {

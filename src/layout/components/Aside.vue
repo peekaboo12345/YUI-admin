@@ -37,9 +37,10 @@
 <script setup>
 import { init } from '@/hooks/common.js';
 import MenuItem from './components/MenuItem.vue';
-import { computed, watch, ref } from 'vue';
-import { isLink } from '@/utils';
+import { computed, watch, ref, onMounted } from 'vue';
+import { isLink } from '@/utils/validate';
 import { openNewWindow } from '@/utils/router';
+import { debounce } from '@/utils/index.js';
 let { base, route, router, common } = init();
 let isCollapse = computed(() => common.isCollapse);
 let searchValue = computed({
@@ -97,6 +98,23 @@ let menuSelect = (index, indexPath, item, routeResult) => {
     }
   }
 };
+
+// 根据缓存默认设置一次
+common.setCollapse(isCollapse.value);
+
+onMounted(() => {
+  window.addEventListener(
+    'resize',
+    debounce(() => {
+      let winW =
+        document.documentElement.clientWidth || document.body.clientWidth;
+      let flag = winW < 800 ? true : false;
+      if (flag !== isCollapse.value) {
+        common.setCollapse(flag);
+      }
+    }),
+  );
+});
 </script>
 
 <style lang="scss" scoped>
@@ -140,5 +158,10 @@ let menuSelect = (index, indexPath, item, routeResult) => {
 }
 :deep(.el-menu.el-menu--vertical.fold.logo) {
   height: calc(100vh - var(--z-header-height) - 38px);
+}
+:deep(.el-menu-item.is-active) {
+  box-shadow: inset 4px 0px 0px var(--el-color-primary);
+  transition: all 0.3s;
+  background-color: var(--el-menu-hover-bg-color);
 }
 </style>

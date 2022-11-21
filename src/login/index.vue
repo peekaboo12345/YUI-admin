@@ -79,6 +79,7 @@ let submitForm = async (formRef) => {
       login(submitData.value).then(async (res) => {
         // 储存登录信息
         base.setToken(res.data);
+
         await base.getRoutes();
         router.replace({ path: '/' });
         loading.value = false;

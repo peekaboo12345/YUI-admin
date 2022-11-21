@@ -3,7 +3,7 @@
     v-if="type === '1'"
     :class="['iconfont', icon]"
     :style="{
-      fontSize: size || '1em',
+      fontSize: size || '1.4em',
       color: color || 'var(--el-text-color-primary)',
     }"
   ></i>
@@ -11,7 +11,7 @@
     v-else
     :class="['icon', icon]"
     :style="{
-      fontSize: size || '1em',
+      fontSize: size || '1.4em',
     }"
   ></i>
 </template>
@@ -37,5 +37,5 @@ defineProps({
 /* 原色图标库（可以根据换肤调整） */
 @import '//at.alicdn.com/t/c/font_3740319_c8gmt6pftwt.css';
 /* 彩色图标库 */
-@import '//at.alicdn.com/t/c/font_3751882_ty6scksf1ui.css';
+@import '//at.alicdn.com/t/c/font_3751882_fuua2of1crk.css';
 </style>

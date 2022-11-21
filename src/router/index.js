@@ -16,6 +16,16 @@ let routes = [
         name: '404',
         component: () => import('@/views/404.vue'),
       },
+      {
+        path: '/user',
+        name: 'user',
+        meta: {
+          id: '88888888', // 设置id是为了在跳转user详情页时，将当前路由添加到tagview中(这三个必传)
+          title: '个人信息',
+          name: 'user',
+        },
+        component: () => import('@/layout/user.vue'),
+      },
     ],
   },
   {
@@ -55,10 +65,9 @@ router.beforeEach(async (to, from, next) => {
     // 当前有登录信息并且有路由
     if (base.token) {
       // 当前没有动态路由信息
-      if (router.getRoutes().length < 6) {
+      if (router.getRoutes().length < 7) {
         base.mapRouteList = [];
         _setAsyncRouter(base.routeList);
-        console.log(router.getRoutes(), 'router');
         next({ ...to, replace: true });
       } else {
         next();
