@@ -35,7 +35,7 @@ defineProps({
 
 <style>
 /* 原色图标库（可以根据换肤调整） */
-@import '//at.alicdn.com/t/c/font_3740319_c8gmt6pftwt.css';
+@import '//at.alicdn.com/t/c/font_3740319_btot639y765.css';
 /* 彩色图标库 */
 @import '//at.alicdn.com/t/c/font_3751882_fuua2of1crk.css';
 </style>

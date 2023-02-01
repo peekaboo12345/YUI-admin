@@ -24,15 +24,31 @@ export const debounce = (fn, delay = 300) => {
 };
 
 // 节流
-export const throttle = (fn, delay = 300) => {
+export const throttle = (fn, delay = 300, only = false) => {
   let timer = null;
   return function () {
     let arg = arguments;
     let that = this;
     if (timer) return;
+    only ? fn.apply(that, arg) : null;
     timer = window.setTimeout(() => {
       fn.apply(that, arg);
       timer = null;
     }, delay);
   };
 };
+
+// 传入秒返回 m:s格式或h:m:s的时间
+export const formatTime = time => {
+  let mapNum = num => num > 9 ? num : '0' + num;
+
+  time = Number(time);
+  let s = time % 60;
+  let m = Math.floor(time / 60);
+  if(m > 60) {
+    let h = Math.floor(m / 60);
+    m = m % 60;
+    return `${mapNum(h)}:${mapNum(m)}:${mapNum(s)}`
+  }
+  return `${mapNum(m)}:${mapNum(s)}`
+}

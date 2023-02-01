@@ -7,19 +7,19 @@ import router from './index.js';
 const modules = import.meta.glob('../views/**/*.vue');
 
 // 设置动态路由
-export const _setAsyncRouter = (routes) => {
+export const _setAsyncRouter = (routes, breadcrumb = null) => {
   let base = useBaseStore(pinia);
 
   // 循环组装子路由
   // 实现思路: 左侧菜单栏使用后台返回的路由层级显示，这个将所有路由转换为同一级，这样只需要用Content组件内的一层router-view就可以显示
   // 所有路由的path都必须以/开头，那样就不会有层级关系，都以根路径开始
   for (let i = 0, len = routes.length; i < len; i++) {
-    let { id, path, name, component, isFixed, children, type } = routes[i];
-
-    let item = { path, name, component: '', meta: { ...routes[i] } };
-
+    let { path, name, component, isFixed, children, type } = routes[i];
+    let breadcrumbList = breadcrumb ? breadcrumb.slice(0) : [];
+    breadcrumbList.push(routes[i])
+    let item = { path, name, component: '', meta: { ...routes[i], breadcrumbList } };
     if (children && children.length > 0) {
-      _setAsyncRouter(children);
+      _setAsyncRouter(children, breadcrumbList);
     } else {
       if (!path && type !== '1') continue;
       if (component) {

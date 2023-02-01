@@ -18,6 +18,7 @@
             !isCollapse && isSearch ? 'fold' : 'unfold',
             isLogo ? 'logo' : 'unlogo',
           ]"
+          :unique-opened="true"
           :default-active="defaultActive"
           @select="menuSelect"
           :collapse="isCollapse"
@@ -79,6 +80,7 @@ let menuSelect = (index, indexPath, item, routeResult) => {
   // 当前菜单没有index属性就跳过
   if (index) {
     let route = mapRouteList.value.find((el) => el.id == index);
+    console.log(route, 'route');
     let path = '';
     switch (route.type) {
       // 1 跳转当前项目内的路由
@@ -130,6 +132,8 @@ onMounted(() => {
     font-weight: 500;
     font-size: 18px;
     white-space: nowrap;
+    text-align: center;
+    width: 60%;
   }
 
   .Fold {

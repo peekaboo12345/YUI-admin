@@ -31,10 +31,10 @@ export default defineConfig({
       vue: 'vue/dist/vue.esm-bundler.js', // 开启运行时编译，主要是解决h函数不渲染template的问题
       // eslint-disable-next-line no-undef
       '@': resolve(__dirname, 'src'), // 别名 `@` 指向 `src` 目录 PS:IDEA编辑器还是不能识别
-      assets: '/src/assets',
-      components: '/src/components',
-      views: '/src/views',
-      utils: '/src/utils',
+      // '@assets': resolve(__dirname, 'src/assets'),
+      // '@components': resolve(__dirname, 'src/components'),
+      // '@views': resolve(__dirname, 'src/views'),
+      // '@utils': resolve(__dirname, 'src/utils'),
     },
   },
 

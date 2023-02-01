@@ -142,6 +142,7 @@ let tagViews = computed(() => base.tagViews);
       overflow: hidden;
       height: 26px;
       display: flex;
+      padding-right: 4px;
 
       ::v-deep(.el-scrollbar__view) {
         height: 100%;
@@ -166,6 +167,7 @@ let tagViews = computed(() => base.tagViews);
           display: flex;
           align-items: center;
           justify-content: space-between;
+          white-space: nowrap;
 
           .el-icon {
             width: 0px;

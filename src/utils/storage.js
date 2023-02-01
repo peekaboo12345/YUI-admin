@@ -9,6 +9,11 @@ export const getL = (key) => {
   return data ? JSON.parse(data) : false;
 };
 
+export const removeL = (key) => {
+  localStorage.removeItem(key);
+  return true;
+};
+
 export const setS = (key, value) => {
   sessionStorage.setItem(key, JSON.stringify(value));
   return true;
@@ -17,6 +22,11 @@ export const setS = (key, value) => {
 export const getS = (key) => {
   let data = sessionStorage.getItem(key);
   return data ? JSON.parse(data) : false;
+};
+
+export const removeS = (key) => {
+  sessionStorage.removeItem(key);
+  return true;
 };
 
 

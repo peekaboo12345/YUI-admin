@@ -34,8 +34,37 @@ export const openNewWindow = async (route) => {
     });
     // router.push({ ...router.currentRoute.value, replace: true });
     window.open(url.href, '_blank');
-    console.log(router.getRoutes());
 
     removeRoute(name + '' + time);
   }
 };
+
+/**
+ * 
+ * @param {*} arr 需要遍历的数组
+ * @param {*} id 需要遍历出所有父级的子id
+ * @param {*} result 默认数组
+ * @returns Array 包含子级及父级的数组
+ */
+export const getMapRoute = (arr, id, result = []) => {
+  for(let i = 0, len = arr.length; i < len; i++) {
+    let item = arr[i];
+    result.push(item);
+
+    if(item.id == id) {
+      if(result.length === 1) return result;
+      return true
+    }
+
+    if(item.children && item.children.length > 0) {
+      let flag = getMapRoute(item.children, id, result);
+      if(flag) {
+        return result
+      }
+    }
+
+    result.pop()
+  }
+
+  return false
+}

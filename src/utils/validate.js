@@ -3,6 +3,31 @@ export function isLink(val) {
   return /http[s]?:\/\//.test(val);
 };
 
+// 判断是否为纯数字
+export function isNumber(val) {
+  return /\d/.test(val);
+};
+
+// 判断是否为纯中文
+export function isCn(val) {
+  return /^[\u4E00-\u9FA5]+$/.test(val);
+};
+
+// 开始和结束不能以空格结尾，不能只有空格
+export function isS(val) {
+  return /^\s|\s$/.test(val)
+};
+
+// 验证是否为json格式  https://stackoverflow.com/questions/2583472/regex-to-validate-json
+export function isJson(val) {
+  return /[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/.test(val)
+};
+
+// 验证是否为车牌号
+export function isPlateNumber(val) {
+  return /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/.test(val)
+};
+
 // 手机号
 export function phone(val) {
   return /^1[3-9]\d{9}$/.test(val)
@@ -38,6 +63,11 @@ export function money(val) {
   return /^([0-9]{1}|^[1-9]{1}\d*)(\.\d{1,2})?$/.test(val)
 }
 
+// 输入是否为空
+export function empty(str) {
+  return !!str.trim()
+}
+
 /**
  * 对比开始和结束时间
  * @param {*} beginTime 开始时间
@@ -57,7 +87,7 @@ export function timeComparison(beginTime, endTime) {
  * @param {*} nowTime 对比时间,不传默认当前时间
  * @returns 不在时间范围内返回false,小于则返回true
  */
-export function timeComparison(beginTime, endTime, nowTime) {
+export function timeComparisonDate(beginTime, endTime, nowTime) {
   let begin = new Date(beginTime).valueOf(),
     end = new Date(endTime).valueOf(),
     now = now ? new Date(nowTime).valueOf() : new Date().valueOf();
@@ -67,6 +97,14 @@ export function timeComparison(beginTime, endTime, nowTime) {
   return false
 }
 
-export function empty(str) {
-  return !!str.trim()
+// ##########################################   以下适配elementPlus框架   ######################################################
+
+// 必填
+export function required(message, trigger = 'blur'){
+  return { required: true, message: message + '不能为空', trigger: trigger}
+}
+
+// 长度限制
+export function length(min = 3, max = 50, trigger = 'blur'){
+  return { min: min, max: max, message: `长度只能在${min}和${max}之间`, trigger: trigger}
 }

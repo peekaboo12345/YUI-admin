@@ -6,6 +6,12 @@
         @click="setCollapse"
         :icon="isCollapse ? 'icon-zhankai' : 'icon-shouqi'"
       ></Iconfont>
+
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item v-for="el in breadcrumbList">{{
+          el.title
+        }}</el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
     <div class="right">
       <!-- 控制主题开关 -->
@@ -54,18 +60,24 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
+import { onBeforeRouteUpdate } from 'vue-router';
 import Switch from './components/switch.vue';
 import FullScreen from './components/FullScreen.vue';
 import Share from './components/share.vue';
 import Setting from './components/Setting.vue';
 import { SwitchButton, User } from '@element-plus/icons-vue';
 import { init } from '@/hooks/common.js';
-let { common, route, router } = init();
+import { getMapRoute } from '@/utils/router';
+import { removeL } from '@/utils/storage';
+let { base, common, route, router } = init();
 
 // 控制左侧菜单
 let isCollapse = computed(() => common.isCollapse);
 const setCollapse = () => common.setCollapse(!isCollapse.value);
+
+// 面包屑数据
+let breadcrumbList = computed(() => base.breadcrumbList);
 
 let onCommand = (name, props) => {
   console.log(name, props);
@@ -74,12 +86,17 @@ let onCommand = (name, props) => {
       router.push({ name: 'user' });
       break;
     case 'switchButton':
-      localStorage.removeItem('base');
-      localStorage.removeItem('common');
-      router.push({ path: '/login', replace: true });
+      removeL('base');
+      removeL('common');
+      router.push({ name: 'login', replace: true });
       break;
   }
 };
+
+onBeforeRouteUpdate(async (to, from) => {
+  console.log(to, 'to');
+  base.setBreadcrumb(getMapRoute(base.routeList, to.meta.id));
+});
 </script>
 <style lang="scss" scoped>
 .header_group {
@@ -94,6 +111,12 @@ let onCommand = (name, props) => {
   font-size: 18px;
 
   .left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    :deep(.el-breadcrumb) {
+      margin-left: 12px;
+    }
   }
 
   .right {

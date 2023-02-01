@@ -52,6 +52,7 @@ const router = createRouter({
 
 // 路由拦截
 router.beforeEach(async (to, from, next) => {
+  console.log(to, 'resrsr')
   Np.start();
   // 调用store必须在路由函数中使用，可参考官网
   let base = useBaseStore(pinia);
@@ -61,7 +62,7 @@ router.beforeEach(async (to, from, next) => {
     next();
     return;
   }
-  if (!['/login'].includes(to.path)) {
+  if (!['login'].includes(to.name)) {
     // 当前有登录信息并且有路由
     if (base.token) {
       // 当前没有动态路由信息

@@ -18,8 +18,6 @@ VMdPreview.use(githubTheme, {
   Hljs: hljs,
 });
 
-console.log(process.env.NODE_ENV, 'process.env.NODE_ENV')
-console.log(import.meta.env, 'import.meta.env')
 // 引入公共样式
 import '@/style/index.scss';
 

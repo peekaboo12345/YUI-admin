@@ -24,6 +24,7 @@ let _mapRoute = (routes, searchValue) => {
 export const useBaseStore = defineStore('base', {
   state() {
     return {
+      breadcrumbList: [], // 面包屑展示数据
       tagViews: [], // 储存当前点击的菜单
       searchValue: '', // 搜索菜单名称
       routeList: [], // 储存动态路由数据
@@ -41,6 +42,9 @@ export const useBaseStore = defineStore('base', {
     },
   },
   actions: {
+    setBreadcrumb(list){
+      this.breadcrumbList = list
+    },
     // 设置token
     setToken(token) {
       this.token = token;
@@ -80,7 +84,6 @@ export const useBaseStore = defineStore('base', {
       }
     },
     async getRoutes() {
-      this.mapRouteList = [];
       let { data: userInfo } = await getUser();
       this.userinfo = userInfo;
       let { data: routeList } = await getRoutes();
