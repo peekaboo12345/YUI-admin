@@ -31,6 +31,8 @@ export default {
 
 <script setup>
 import { ref } from 'vue';
+import initScroll from '@/hooks/scroll';
+initScroll();
 </script>
 <style scoped lang="scss">
 .flex {

@@ -105,6 +105,8 @@ import {
   getRsaKeys,
 } from '@/utils/crypto.js';
 import { init } from '@/hooks/common';
+import initScroll from '@/hooks/scroll';
+initScroll();
 let { base } = init();
 let value = ref('');
 let value1 = ref('');

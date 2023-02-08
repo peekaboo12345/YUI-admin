@@ -1,12 +1,12 @@
 <!--  -->
 <template>
   <div class="content" id="content">
-    <section>
-      <router-view v-slot="{ Component }">
+    <section ref="sectionRef">
+      <router-view v-slot="{ Component, route }">
         <transition name="fade-transform" mode="out-in">
-          <keep-alive :include="keepAliveComponentNames">
+          <KeepAlive :include="keepAliveComponentNames">
             <component :is="Component" :key="route.name" />
-          </keep-alive>
+          </KeepAlive>
         </transition>
       </router-view>
     </section>
@@ -16,11 +16,27 @@
 <script setup>
 import { init } from '@/hooks/common.js';
 import watermark from '@/utils/watermark.js';
-import { computed, watch, onMounted } from 'vue';
-let { base, route, common } = init();
+import { ref, watch, onMounted, computed } from 'vue';
+import mitt from '@/config/mitt';
+let { base, common } = init();
+let dom = {};
+let sectionRef = ref();
+
+// 绑定事件，当触发是修改滚动条位置
+mitt.on('scrollChange', (obj) => {
+  sectionRef.value.scrollTop = obj.top;
+  sectionRef.value.scrollLeft = obj.left;
+});
+
+// 绑定事件, 用来获取当前滚动条的位置
+mitt.on('getOffset', (callback) => {
+  callback({
+    top: sectionRef.value.scrollTop,
+    left: sectionRef.value.scrollLeft,
+  });
+});
 
 let keepAliveComponentNames = computed(() => base.keepAliveComponentNames);
-let dom = {};
 onMounted(() => {
   watch(
     () => common.isWatermark,

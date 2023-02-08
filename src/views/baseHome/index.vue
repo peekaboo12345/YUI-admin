@@ -11,5 +11,7 @@ export default {
 <script setup>
 import { ref } from 'vue';
 import text from './baseHome.md?raw';
+import initScroll from '@/hooks/scroll';
+initScroll();
 </script>
 <style scoped lang="scss"></style>

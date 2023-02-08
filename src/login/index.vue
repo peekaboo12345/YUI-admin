@@ -43,10 +43,13 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { Lock, User, View, Hide } from '@element-plus/icons-vue';
 import { login } from '@/api/login.js';
 import { init } from '@/hooks/common';
+import { setL } from '@/utils/storage';
+import { routes } from '@/router';
+import { flatten } from '@/utils/router';
 
 let { base, router } = init();
 let formRef = ref();
@@ -79,7 +82,7 @@ let submitForm = async (formRef) => {
       login(submitData.value).then(async (res) => {
         // 储存登录信息
         base.setToken(res.data);
-
+        setL('token', res.data);
         await base.getRoutes();
         router.replace({ path: '/' });
         loading.value = false;
@@ -87,6 +90,12 @@ let submitForm = async (formRef) => {
     }
   });
 };
+
+onMounted(() => {
+  if (router.getRoutes().length > flatten(routes).length) {
+    router.removeRoute('layout');
+  }
+});
 </script>
 <style lang="scss" scoped>
 .bg {

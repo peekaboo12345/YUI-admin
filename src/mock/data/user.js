@@ -14,7 +14,8 @@ let routeList = [
     path: '/baseHome',
     name: 'baseHome',
     title: '首页',
-    isFixed: true,
+    isFixed: true, // 是否固定显示
+    keepAlive: false, // 是否缓存 (默认不缓存)
     component: 'baseHome/index',
     icon: 'i-shenghuo',
     type: '1',
@@ -27,6 +28,7 @@ let routeList = [
         path: '/FullScreen',
         name: 'FullScreen',
         title: '全屏组件',
+        keepAlive: true,
         component: 'components/FullScreen/dome',
         icon: 'i-st_storage_port',
         type: '1',
@@ -57,6 +59,7 @@ let routeList = [
         path: '/validate',
         name: 'validate',
         title: '校验方法',
+        keepAlive: true, // 是否缓存 (默认不缓存)
         component: 'utils/validate/index',
         icon: 'i--xiaoyanguize',
         type: '1',

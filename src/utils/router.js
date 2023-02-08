@@ -1,4 +1,5 @@
 import router from '@/router/index';
+import { BASE64_E } from '@/utils/crypto';
 
 // 刷新当前路由
 export const refresh = (tagName) => {
@@ -16,26 +17,17 @@ export const refresh = (tagName) => {
 export const openNewWindow = async (route) => {
   let { path, name, component } = route;
   if (path && name && component) {
-    let time = new Date().getTime();
-    let newRoute = {
-      path: path + '' + time,
-      name: name + '' + time,
-      component: '',
-    };
-
-    let removeRoute = router.addRoute(newRoute);
     let url = router.resolve({
-      name: name + '' + time,
+      name: name,
       query: {
-        path: path,
-        name: name,
-        component,
+        key: BASE64_E({
+          path: path,
+          name: name,
+          component,
+        })
       },
     });
-    // router.push({ ...router.currentRoute.value, replace: true });
     window.open(url.href, '_blank');
-
-    removeRoute(name + '' + time);
   }
 };
 
@@ -67,4 +59,18 @@ export const getMapRoute = (arr, id, result = []) => {
   }
 
   return false
+}
+
+/**
+ * 
+ * @param {*} arr 数组
+ * @param {*} childName 子级数组名称
+ * @returns 返回扁平化后的数组
+ */
+export const flatten = (arr, childName = 'children', defaultArray = []) => {
+  arr.forEach((item) => {
+    defaultArray.push(item);
+    Array.isArray(item.children) ? flatten(item.children, childName, defaultArray) : null
+  })
+  return defaultArray
 }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import router from '@/router';
-import { getBase } from './storage';
+import { getL } from './storage';
 import { ElMessage } from 'element-plus';
 // const baseUrl = '/';
 
@@ -14,10 +14,11 @@ const service = axios.create({
 
 // 请求前拦截器
 service.interceptors.request.use((config) => {
+  console.log(config, 'config');
   // 不是登录界面每次请求需要加上token验证用户信息
   if (config.url !== '/login') {
     // 登录成功
-    let token = getBase('token', '');
+    let token = getL('token');
     if (token) {
       // 如果token存在，说明不需要登录
       config.headers['auth_token'] = token;

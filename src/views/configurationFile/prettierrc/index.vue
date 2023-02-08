@@ -11,5 +11,7 @@ export default {
 <script setup>
 import { ref } from 'vue';
 import text from './prettier.md?raw';
+import initScroll from '@/hooks/scroll';
+initScroll();
 </script>
 <style scoped lang="scss"></style>

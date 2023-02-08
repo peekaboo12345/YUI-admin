@@ -5,6 +5,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import Video from './index.vue';
+import initScroll from '@/hooks/scroll';
+initScroll();
 
 const videoRef = ref();
 onMounted(() => {

@@ -7,7 +7,7 @@
         :icon="isCollapse ? 'icon-zhankai' : 'icon-shouqi'"
       ></Iconfont>
 
-      <el-breadcrumb separator="/">
+      <el-breadcrumb separator="/" v-if="!isCollapse">
         <el-breadcrumb-item v-for="el in breadcrumbList">{{
           el.title
         }}</el-breadcrumb-item>
@@ -69,7 +69,6 @@ import Setting from './components/Setting.vue';
 import { SwitchButton, User } from '@element-plus/icons-vue';
 import { init } from '@/hooks/common.js';
 import { getMapRoute } from '@/utils/router';
-import { removeL } from '@/utils/storage';
 let { base, common, route, router } = init();
 
 // 控制左侧菜单
@@ -80,21 +79,18 @@ const setCollapse = () => common.setCollapse(!isCollapse.value);
 let breadcrumbList = computed(() => base.breadcrumbList);
 
 let onCommand = (name, props) => {
-  console.log(name, props);
   switch (name) {
     case 'user':
       router.push({ name: 'user' });
       break;
     case 'switchButton':
-      removeL('base');
-      removeL('common');
-      router.push({ name: 'login', replace: true });
+      base.clearBase();
+      router.push({ path: '/login' });
       break;
   }
 };
 
 onBeforeRouteUpdate(async (to, from) => {
-  console.log(to, 'to');
   base.setBreadcrumb(getMapRoute(base.routeList, to.meta.id));
 });
 </script>

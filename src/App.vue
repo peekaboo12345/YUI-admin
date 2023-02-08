@@ -12,6 +12,7 @@ let { router } = init();
 .container {
   height: 100vh;
   width: 100vw;
+  overflow: auto;
   /* position: relative; */
   /* background-color: var(--el-bg-color); */
 }

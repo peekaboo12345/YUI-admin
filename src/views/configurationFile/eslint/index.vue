@@ -15,6 +15,8 @@ export default {
 import loading from '@/hooks/loading';
 import { ref } from 'vue';
 import text from './eslint.md?raw';
+import initScroll from '@/hooks/scroll';
+initScroll();
 let eslint = ref('');
 let { openLoading, closeLoading } = loading(eslint);
 </script>

@@ -35,6 +35,7 @@ export const SHA256 = (str) => {
 
 // BASE64加密
 export const BASE64_E = (str) => {
+  str = JSON.stringify(str);
   return str ? CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(str)) : ''
 }
 

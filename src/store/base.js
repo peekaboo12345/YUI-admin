@@ -35,7 +35,7 @@ export const useBaseStore = defineStore('base', {
   },
   getters: {
     keepAliveComponentNames() {
-      return this.tagViews.map((el) => el.name);
+      return this.tagViews.filter((el) => el.keepAlive).map(el => el.name);
     },
     routes() {
       return _mapRoute(this.routeList, this.searchValue);
@@ -69,6 +69,7 @@ export const useBaseStore = defineStore('base', {
         router.currentRoute.value.fullPath === '/' &&
         this.tagViews.length > 0
       ) {
+        console.log('设置默认展示页面');
         router.push({ name: this.tagViews[this.tagViews.length - 1].name });
       }
     },
@@ -89,6 +90,16 @@ export const useBaseStore = defineStore('base', {
       let { data: routeList } = await getRoutes();
       this.routeList = routeList;
     },
+    // 清空数据
+    clearBase() {
+      this.breadcrumbList = []; // 面包屑展示数据
+      this.tagViews = []; // 储存当前点击的菜单
+      this.searchValue = ''; // 搜索菜单名称
+      this.routeList = []; // 储存动态路由数据
+      this.mapRouteList = []; // 主要将多层级路由保存为同一级(用于查找方便)
+      this.userinfo = {}; // 当前用户登录信息
+      this.token = ''; // 登录验证
+    }
   },
   // 使用该插件，开启数据缓存
   persist: {

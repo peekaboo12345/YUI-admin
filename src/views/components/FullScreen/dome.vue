@@ -6,7 +6,6 @@
     <div>{{ value }}</div>
     <div>
       <button name="放大" @click="open">放大</button>
-      <button name="缩小" @click="close">缩小</button>
     </div>
   </div>
 </template>
@@ -20,16 +19,13 @@ export default {
 <script setup>
 import { ref } from 'vue';
 import FullScreen from './index.vue';
+import initScroll from '@/hooks/scroll';
+initScroll();
 let fullScreen = ref();
 let value = ref(0);
 let open = () => {
   value.value++;
   fullScreen.value.open();
-};
-
-let close = () => {
-  value.value--;
-  fullScreen.value.close();
 };
 </script>
 <style scoped lang="scss"></style>

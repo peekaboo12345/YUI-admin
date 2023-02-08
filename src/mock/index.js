@@ -24,5 +24,5 @@ dataList.forEach((item) => {
 });
 
 Mock.setup({
-  timeout: 1000,
+  timeout: 100,
 });

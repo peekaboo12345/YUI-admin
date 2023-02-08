@@ -80,7 +80,6 @@ let menuSelect = (index, indexPath, item, routeResult) => {
   // 当前菜单没有index属性就跳过
   if (index) {
     let route = mapRouteList.value.find((el) => el.id == index);
-    console.log(route, 'route');
     let path = '';
     switch (route.type) {
       // 1 跳转当前项目内的路由
